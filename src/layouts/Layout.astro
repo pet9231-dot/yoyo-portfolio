@@ -1,0 +1,87 @@
+
+<!doctype html>
+<html lang="zh-TW"> <head>
+        <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Jia-You Studio</title>
+    </head>
+
+<body>
+        <div class="container">
+            <nav class="site-nav">
+                <div class="logo">
+                    <a href="/">Jia-You Studio</a>
+                </div>
+                <div class="links">
+                    <a href="/about">關於我</a>
+                    <a href="/portfolio/music">音樂製作</a>
+                    <a href="/lifestyle/coffee">料理與咖啡</a>
+                </div>
+            </nav>
+            
+            <main>
+                <slot />
+            </main>
+        </div>
+    </body>
+
+    <style is:global>
+        /* 1. 基礎設定 (Reset) */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #FAFAFA; /* 帶一點點暖灰的白，眼睛比較舒服 */
+            color: #333333; /* 避免使用純黑，改用深炭灰更有質感 */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.7; /* 增加行距，讓文章呼吸 */
+        }
+
+        /* 2. 版面置中與寬度控制 */
+        .container {
+            max-width: 800px; /* 限制網站最大寬度 */
+            margin: 0 auto; /* 魔法：讓區塊永遠在螢幕正中間 */
+            padding: 0 2rem; /* 左右留白，手機上看才不會貼壁 */
+        }
+
+        /* 3. 質感導覽列設計 */
+        .site-nav {
+            display: flex;
+            justify-content: space-between; /* 讓 Logo 靠左，選單靠右 */
+            align-items: center;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #EAEAEA; /* 淡淡的分隔線 */
+        }
+
+        .site-nav .logo a {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #111;
+        }
+
+        .site-nav a {
+            text-decoration: none; /* 拿掉醜醜的超連結底線 */
+            color: #666;
+            margin-left: 1.5rem; /* 按鈕之間的距離 */
+            transition: color 0.3s ease; /* 滑鼠移過去的漸變動畫 */
+        }
+
+        .site-nav a:hover {
+            color: #FF6B6B; /* 滑鼠移過去變成活潑的珊瑚紅 */
+        }
+
+        /* 4. 針對 Markdown 產生的標題做美化 */
+        main h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #111;
+        }
+
+        main h2 {
+            margin-top: 2.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #EEE;
+        }
+    </style>
