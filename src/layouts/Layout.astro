@@ -1,87 +1,187 @@
-
+---
+---
 <!doctype html>
-<html lang="zh-TW"> <head>
-        <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Jia-You Studio</title>
     </head>
-
-<body>
+    <body>
         <div class="container">
             <nav class="site-nav">
                 <div class="logo">
                     <a href="/">Jia-You Studio</a>
                 </div>
-                <div class="links">
-                    <a href="/about">關於我</a>
-                    <a href="/portfolio/music">音樂製作</a>
-                    <a href="/lifestyle/coffee">料理與咖啡</a>
-                </div>
+
+                <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+                <label for="menu-toggle" class="menu-toggle-label">☰</label>
+
+                <ul class="nav-links">
+                    <li><a href="/about">關於我</a></li>
+                    
+                    <li class="dropdown">
+                        <span class="drop-button">作品 ▾</span>
+                        <ul class="dropdown-menu">
+                            <li><a href="/portfolio/music">音樂</a></li>
+                            <li><a href="/portfolio/art">繪畫</a></li>
+                            <li><a href="/portfolio/photography">攝影</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <span class="drop-button">生活 ▾</span>
+                        <ul class="dropdown-menu">
+                            <li><a href="/lifestyle/cooking">料理</a></li>
+                            <li><a href="/lifestyle/coffee">咖啡</a></li>
+                            <li><a href="/lifestyle/plants">植栽</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/contact">連絡我</a></li>
+                </ul>
             </nav>
-            
             <main>
                 <slot />
             </main>
         </div>
     </body>
+</html>
 
-    <style is:global>
-        /* 1. 基礎設定 (Reset) */
-        * {
-            box-sizing: border-box;
+<style is:global>
+    /* 1. 基礎設定 */
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background-color: #FAFAFA;
+        color: #333333;
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.7;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
+
+    /* 2. 導覽列母體設定 */
+    .site-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid #EAEAEA;
+        position: relative; /* 讓子選單的絕對定位有基準點 */
+    }
+    .logo a { font-weight: bold; font-size: 1.2rem; color: #111; text-decoration: none; }
+    
+    /* 3. 電腦版選單樣式 */
+    .nav-links {
+        display: flex;
+        gap: 1.5rem; /* 按鈕之間的距離 */
+        list-style: none; /* 拿掉預設的點點 */
+        margin: 0;
+        padding: 0;
+    }
+    .nav-links a, .drop-button {
+        text-decoration: none;
+        color: #666;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    .nav-links a:hover, .drop-button:hover { color: #FF6B6B; }
+
+    /* --- 下拉選單動畫核心 (電腦版) --- */
+    .dropdown { position: relative; }
+    .dropdown-menu {
+        position: absolute;
+        top: 150%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px); /* 置中並往上縮一點 */
+        background-color: #ffffff;
+        min-width: 120px;
+        list-style: none;
+        padding: 0.5rem 0;
+        margin: 0;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        text-align: center;
+        
+        /* 動畫魔法：預設隱藏 */
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    .dropdown-menu li a {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #333;
+    }
+    .dropdown-menu li a:hover { background-color: #FFF0F0; color: #FF6B6B; }
+
+    /* 滑鼠懸停時觸發顯示 */
+    .dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0); /* 平滑降落 */
+    }
+
+    /* --- 手機版隱藏元素 --- */
+    .menu-toggle-checkbox { display: none; } /* 永遠隱藏真正的核取方塊 */
+    .menu-toggle-label {
+        display: none; /* 電腦版隱藏漢堡按鈕 */
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    /* =========================================
+       手機版響應式設計 (螢幕寬度小於 768px 時觸發) 
+       ========================================= */
+    @media (max-width: 768px) {
+        .menu-toggle-label { display: block; } /* 顯示漢堡按鈕 */
+        
+        /* 選單變成垂直排列，預設隱藏 */
+        .nav-links {
+            display: none; 
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #FAFAFA;
+            flex-direction: column;
+            gap: 0;
+            text-align: center;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            z-index: 99;
         }
 
-        body {
-            margin: 0;
-            background-color: #FAFAFA; /* 帶一點點暖灰的白，眼睛比較舒服 */
-            color: #333333; /* 避免使用純黑，改用深炭灰更有質感 */
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.7; /* 增加行距，讓文章呼吸 */
+        .nav-links li {
+            border-bottom: 1px solid #EAEAEA;
+        }
+        
+        .nav-links a, .drop-button {
+            display: block;
+            padding: 1rem;
         }
 
-        /* 2. 版面置中與寬度控制 */
-        .container {
-            max-width: 800px; /* 限制網站最大寬度 */
-            margin: 0 auto; /* 魔法：讓區塊永遠在螢幕正中間 */
-            padding: 0 2rem; /* 左右留白，手機上看才不會貼壁 */
-        }
-
-        /* 3. 質感導覽列設計 */
-        .site-nav {
+        /* 當漢堡按鈕被點擊 (Checkbox 被打勾) 時，顯示選單 */
+        .menu-toggle-checkbox:checked ~ .nav-links {
             display: flex;
-            justify-content: space-between; /* 讓 Logo 靠左，選單靠右 */
-            align-items: center;
-            padding: 2rem 0;
-            margin-bottom: 3rem;
-            border-bottom: 1px solid #EAEAEA; /* 淡淡的分隔線 */
         }
 
-        .site-nav .logo a {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #111;
+        /* 手機版的下拉選單：取消懸浮，改為直接展開在下面 */
+        .dropdown-menu {
+            position: static; /* 解除漂浮狀態 */
+            box-shadow: none;
+            background-color: transparent;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            display: none; /* 手機上預設收合次選單 */
         }
 
-        .site-nav a {
-            text-decoration: none; /* 拿掉醜醜的超連結底線 */
-            color: #666;
-            margin-left: 1.5rem; /* 按鈕之間的距離 */
-            transition: color 0.3s ease; /* 滑鼠移過去的漸變動畫 */
+        /* 手機上點擊主項目時展開次選單 */
+        .dropdown:hover .dropdown-menu,
+        .dropdown:active .dropdown-menu {
+            display: block;
         }
-
-        .site-nav a:hover {
-            color: #FF6B6B; /* 滑鼠移過去變成活潑的珊瑚紅 */
-        }
-
-        /* 4. 針對 Markdown 產生的標題做美化 */
-        main h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #111;
-        }
-
-        main h2 {
-            margin-top: 2.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #EEE;
-        }
-    </style>
+    }
+</style>
